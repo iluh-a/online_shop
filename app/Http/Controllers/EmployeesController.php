@@ -26,7 +26,7 @@ class EmployeesController extends Controller
 
 //    CREATING
     public function store(Request $request){
-        if(!auth()->user()->tokenCan('employee-access')) {   //  if u are an employee
+        if(auth()->user()->tokenCan('customer-access')) {   //  if u are an employee
             abort(403, 'unauthorized');
         }
         $employee = $request->validate([
@@ -43,7 +43,7 @@ class EmployeesController extends Controller
     }
 //    UPDATING
     public function update(Employee $Employee, Request $request){
-        if(auth()->user()->tokenCan('employee-access') && $Employee->id == auth()->user()-id) {
+        if(auth()->user()->tokenCan('employee-access')) {
             $Employee->update($request->json()->all());
             return Employee::all();
         }
@@ -52,7 +52,7 @@ class EmployeesController extends Controller
 
 //    DELETING
     public function destroy(Employee $Employee){
-        if(auth()->user()->tokenCan('employee-access') && $Employee->id == auth()->user()-id) {
+        if(auth()->user()->tokenCan('employee-access')) {
             try {
                 $Employee->delete();
                 return Employee::all();

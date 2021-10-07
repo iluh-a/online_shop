@@ -10,16 +10,10 @@ class ProductsController extends Controller
 
 //    READING
     public function index(){
-        if(!auth()->user()->tokenCan('employee-access')) {   // if u are an employee
-            abort(403, 'unauthorized');
-        }
         return Product::all();
     }
 
     public function show($id){
-        if(!auth()->user()->tokenCan('employee-access')) {   // if u are an employee
-            abort(403, 'unauthorized');
-        }
         return Product::findOrFail($id);
     }
 

@@ -12,9 +12,8 @@ class OrdersController extends Controller
 //    READING
     public function index(){
         if(auth()->user()->tokenCan('customer-access')) {  // if u are customer
-//            return Order::where('customer_id', auth()->user()->id); // return this customers orders
             $customer = Customer::find(auth()->user()->id);
-            return $customer->orders;
+            return $customer->orders;     // return this customers orders
 
         } elseif (auth()->user()->tokenCan('employee-access')){ // if u are employee
             Order::paginate(5);                             // return all orders

@@ -14,8 +14,8 @@ class CreatePaymentsTable extends Migration
     public function up()
     {
         Schema::create('payments', function (Blueprint $table) {
-//            $table->id();
-            $table->string('check_num')->unique();
+            $table->id('check_num');
+//            $table->string()->unique();
             $table->foreignIdFor(\App\Models\Customer::class, 'customer_id')->constrained('customers', 'id')
                 ->onDelete('cascade');
 //                ->onUpdate('cascade')

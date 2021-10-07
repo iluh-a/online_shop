@@ -22,14 +22,14 @@ class CustomersController extends Controller
             return Customer::findOrFail($id)->load('orders');
         }
         abort(403, 'unauthorized');
-
     }
 
 //    CREATING
     public function store(Request $request){
-        if(!auth()->user()->tokenCan('customer-access')) { // only for customers
+        if(!auth()->user()->tokenCan('customer-access')) { // employees cant create customers
             abort(403, 'unauthorized');
         }
+
         $customer = $request->validate([
             'sales_rep_employee_num' => 'required',
             'name' => 'required',

@@ -26,7 +26,7 @@ class AuthController extends Controller
 
         $token_name = $request->role."-access";
 
-        $token = $user->createToken($token_name)->plainTextToken;
+        $token = $user->createToken($token_name, [$token_name])->plainTextToken;
 
         $response = [
             'user' => $user,
@@ -53,7 +53,7 @@ class AuthController extends Controller
         }
 
         $token_name = $request->role."-access";
-        $token = $user->createToken($token_name)->plainTextToken;
+        $token = $user->createToken($token_name, [$token_name])->plainTextToken;
 
         $response = [
             'user' => $user,

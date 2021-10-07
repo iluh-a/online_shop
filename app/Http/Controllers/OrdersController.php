@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,8 @@ class OrdersController extends Controller
     public function index(){
         if(auth()->user()->tokenCan('customer-access')) {  // if u are customer
 //            return Order::where('customer_id', auth()->user()->id); // return this customers orders
-            return auth()->user()->orders;
+            $customer = Customer::find(auth()->user()->id);
+            return $customer->orders;
 
         } elseif (auth()->user()->tokenCan('employee-access')){ // if u are employee
             Order::paginate(5);                             // return all orders
@@ -33,14 +35,13 @@ class OrdersController extends Controller
 
 //    CREATING
     public function store(Request $request){
-        if(!auth()->user()->tokenCan('customer-access')) {
+        if(auth()->user()->tokenCan('employee-access')) {
             abort(403, 'unauthorized');
         }
         $attributes = $request->validate([
             'customer_id' => 'required',
             'order_date' => 'required|date',
             'required_date' => 'required|date',
-            'qty' => 'required',
             'status' => 'required',
             'comments' => 'required'
         ]);

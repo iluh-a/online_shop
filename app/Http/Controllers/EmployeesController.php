@@ -18,7 +18,8 @@ class EmployeesController extends Controller
     }
 
     public function show($id){
-        if(auth()->user()->tokenCan('employee-access') || Customer::findOrFail(auth()->user()->id)->employee()->id == $id) {   // FOR CUSTOMER: if this employee is yours OR if u are an employee
+        // if this employee is yours OR if u are an employee
+        if(auth()->user()->tokenCan('employee-access') || Customer::findOrFail(auth()->user()->id)->employee()->id == $id) {
             return Employee::findOrFail($id);
         }
         abort(403, 'unauthorized');
@@ -43,7 +44,7 @@ class EmployeesController extends Controller
     }
 //    UPDATING
     public function update(Employee $Employee, Request $request){
-        if(auth()->user()->tokenCan('employee-access')) {
+        if(auth()->user()->tokenCan('employee-access')) {  // only employees
             $Employee->update($request->json()->all());
             return Employee::all();
         }
@@ -52,7 +53,7 @@ class EmployeesController extends Controller
 
 //    DELETING
     public function destroy(Employee $Employee){
-        if(auth()->user()->tokenCan('employee-access')) {
+        if(auth()->user()->tokenCan('employee-access')) {  // only employees
             try {
                 $Employee->delete();
                 return Employee::all();

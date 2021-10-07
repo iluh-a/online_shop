@@ -22,19 +22,20 @@ class OrdersController extends Controller
     }
 
     public function show(Order $order){
-//        if u are  this orders customers employee OR u are the customer of the order
-        if((auth()->user()->tokenCan('employee-access') && auth()->user()->id == $order->customer->employee->id) || auth()->user()->id == $order->customer_id) {
+//        if u are  this orders customers employee
+        if(auth()->user()->tokenCan('employee-access') && auth()->user()->id == $order->customer->employee->id) {
             return $order->with('products');    // return order with its products
-//            $prods = $order->products;
-//            $order["products"] = $prods;
-//            return $order;
+
+//            OR u are the customer of the order
+        } elseif (auth()->user()->id == $order->customer_id) {
+            return $order->with('products');    // return order with its products
         }
         abort(403, 'unauthorized');
     }
 
 //    CREATING
     public function store(Request $request){
-        if(auth()->user()->tokenCan('employee-access')) {
+        if(auth()->user()->tokenCan('employee-access')) { // only customers
             abort(403, 'unauthorized');
         }
         $attributes = $request->validate([
